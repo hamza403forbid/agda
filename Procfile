@@ -1,0 +1,1 @@
+web: python AGDA_Process_Pipeline.py runserver 0.0.0.0:5000
