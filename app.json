@@ -1,11 +1,6 @@
 {
   "name": "Automated Graphic Design Assessment",
   "description": "Assesses Graphic Design",
-  "keywords": [
-    "productivity",
-    "HTML5",
-    "scalpel"
-  ],
   "buildpacks": [
     {
       "url": "https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-python"
