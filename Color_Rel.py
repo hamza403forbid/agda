@@ -54,7 +54,6 @@ for file in os.listdir("test"):
 
 # In[12]:
 
-print(tcol)
 
 
 # In[15]:
@@ -63,11 +62,16 @@ accr = []
 for i in range(len(tcol)):
     rel=[]
     for c in tcol[i]:
-        for k in tkwd[i]:
-            rel.append(get_CR(np.array(list(c)),k))
-    rel = np.array(rel)
-    cr = rel.mean()
-    accr.append(100-((abs(cr-tcr[i][0])/tcr[i][0])*100))
+        if tkwd[i] is not None:
+            for k in tkwd[i]:
+                rel.append(get_CR(np.array(list(c)),k))
+    if len(rel) > 0:
+        rel = np.array(rel)
+        cr = rel.mean()
+        if tcr[i] is not None and (tcr[i][0] is not None or tcr[i][0] != 0):
+            acc = 100-((abs(cr-tcr[i][0])/tcr[i][0])*100)
+            if acc != -np.inf and acc != np.inf:   
+                accr.append(acc)
 accr = np.array(accr)
 print(accr.mean())
 

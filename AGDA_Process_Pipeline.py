@@ -13,7 +13,7 @@ from colorthief import ColorThief
 #Loading Image URL from API
 r = requests.get('https://agda-fyp.herokuapp.com/load')
 data = r.json()
-print(len(data))
+#print(len(data))
 
 
 # In[3]:
@@ -25,10 +25,11 @@ syms = []
 vis =[]
 kwd = []
 colors = []
-for it,i in enumerate(data[:20]):
+for it,i in enumerate(data[:150]):
     #Loading Images
     try:
         r = requests.get(i['url'],stream=True).raw
+        
         try:
             img = Image.open(r).convert('RGBA').resize((50,50))
             imgs.append(img)
@@ -57,16 +58,17 @@ for it,i in enumerate(data[:20]):
 
 colordic = {}
 for i in range(len(colors)):
-    for c in colors[i]:
-        if not c is None:
-            for k in kwd[i]:
-                key = str(c)
-                if not (key in colordic and colordic[key]['keyword']==k):
-                    colordic.update({key:{'keyword':k, 'cr':vis[i][0]}})
-                else:
-                    icr = (colordic[key]['cr']+vis[i][0])/2
-                    colordic.update({key:{'keyword':k, 'cr':icr}})
-print(strcolordic)
+    if colors[i] is not None:
+        for c in colors[i]:
+            if not c is None:
+                for k in kwd[i]:
+                    key = str(c)
+                    if not (key in colordic and colordic[key]['keyword']==k):
+                        colordic.update({key:{'keyword':k, 'cr':vis[i][0]}})
+                    else:
+                        icr = (colordic[key]['cr']+vis[i][0])/2
+                        colordic.update({key:{'keyword':k, 'cr':icr}})
+print(str(colordic))
 f = open('temp/colortable', 'w')
 f.write(str(colordic))
 f = open('temp/syms', 'w')
@@ -86,7 +88,7 @@ it=0
 tsyms=[]
 tvis=[]
 imgs=[]
-for it,i in enumerate(data[20:25]):
+for it,i in enumerate(data[150:]):
     try:
     #Loading Images
         r = requests.get(i['url'],stream=True).raw
