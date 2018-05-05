@@ -52,9 +52,10 @@ for i in data[:x]:
         kwd.append(kd)
     except IOError:
         print("Load Error")
-        colors.pop()
-        color_rel.pop()
-        kwd.pop()
+        if it>0:
+            colors.pop()
+            color_rel.pop()
+            kwd.pop()
         colors.append(None)
         color_rel.append(None)
         kwd.append(None)
