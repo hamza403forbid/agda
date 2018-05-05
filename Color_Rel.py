@@ -112,8 +112,8 @@ for i in range(len(test_colors)):
         rel = np.array(rel)
         cr = rel.mean()
         if test_color_rel[i] is not None and (test_color_rel[i] != 0):
-            acc = 100-((abs(cr-test_color_rel[i])/test_color_rel[i])*100)
-            if acc != -np.inf and acc != np.inf:   
+            acc = (abs(cr)/test_color_rel[i])*100
+            if acc != -np.inf and acc != np.inf and acc>0:   
                 accr.append(acc)
 accr = np.array(accr)
 print(accr.mean())
