@@ -37,7 +37,10 @@ random.shuffle(data)
 kwd = []
 colors = []
 color_rel =[]
-for i in data[:150]:
+it=0
+x=150
+for i in data[:x]:
+    print(it)
     r = requests.get(i['url'],stream=True).raw
     try:
         color_thief = ColorThief(r)
@@ -48,14 +51,20 @@ for i in data[:150]:
         kwd.append(kd)
     except IOError:
         print("Load Error")
+        colors.pop()
+        color_rel.pop()
+        kwd.pop()
         colors.append(None)
         color_rel.append(None)
         kwd.append(None)
+    it=it+1
 
 test_kwd = []
 test_colors = []
 test_color_rel =[]
-for i in data[150:]:
+it=0
+for i in data[x:]:
+    print(it)
     r = requests.get(i['url'],stream=True).raw
     try:
         color_thief = ColorThief(r)
@@ -66,9 +75,13 @@ for i in data[150:]:
         test_kwd.append(kd)
     except IOError:
         print("Load Error")
+        test_colors.pop()
+        test_color_rel.pop()
+        test_kwd.pop()
         test_colors.append(None)
         test_color_rel.append(None)
         test_kwd.append(None)
+    it=it+1
 
 colordic = {}
 for i in range(len(colors)):
