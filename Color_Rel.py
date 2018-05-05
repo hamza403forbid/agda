@@ -1,12 +1,10 @@
-
-# coding: utf-8
-
-# In[14]:
-
+import requests
+from colorthief import ColorThief
 import numpy as np
+import random
+
 def get_CR(A,K):    
-    f = open('temp/colortable','r')
-    ct = eval(f.read())
+    ct = colordic
     colors=[]
     for key,val in ct.items():
         colors.append(list(eval(key)))
@@ -32,66 +30,74 @@ def get_CR(A,K):
 
 # In[10]:
 
-from PIL import Image
-from colorthief import ColorThief
-fo = open('test/tkwd','r')
-tkwd = eval(fo.read())
-fo = open('test/tvis','r')
-tcr = eval(fo.read())
-tcol=[]
 
+r = requests.get('https://agda-fyp.herokuapp.com/load')
+data = r.json()
+random.shuffle(data)
+kwd = []
+colors = []
+color_rel =[]
+for i in data[:150]:
+    r = requests.get(i['url'],stream=True).raw
+    try:
+        color_thief = ColorThief(r)
+        colors.append(color_thief.get_palette(color_count=3))
+        #Labels
+        color_rel.append(i['color_r'])
+        kd = i['keyword'].split(';')
+        kwd.append(kd)
+    except IOError:
+        print("Load Error")
+        colors.append(None)
+        color_rel.append(None)
+        kwd.append(None)
 
+test_kwd = []
+test_colors = []
+test_color_rel =[]
+for i in data[150:]:
+    r = requests.get(i['url'],stream=True).raw
+    try:
+        color_thief = ColorThief(r)
+        test_colors.append(color_thief.get_palette(color_count=3))
+        #Labels
+        test_color_rel.append(i['color_r'])
+        kd = i['keyword'].split(';')
+        test_kwd.append(kd)
+    except IOError:
+        print("Load Error")
+        test_colors.append(None)
+        test_color_rel.append(None)
+        test_kwd.append(None)
 
-# In[11]:
-
-import os
-for file in os.listdir("test"):
-    if file.endswith(".jpg"):
-        f=os.path.join("test", file)
-        color_thief = ColorThief(f)
-        tcol.append(color_thief.get_palette(color_count=3))
-
-
-# In[12]:
-
-
-
-# In[15]:
+colordic = {}
+for i in range(len(colors)):
+    if colors[i] is not None:
+        for c in colors[i]:
+            if not c is None:
+                for k in kwd[i]:
+                    key = str(c)
+                    if not (key in colordic and colordic[key]['keyword']==k):
+                        colordic.update({key:{'keyword':k, 'cr':color_rel[i]}})
+                    else:
+                        icr = (colordic[key]['cr']+color_rel[i])/2
+                        colordic.update({key:{'keyword':k, 'cr':icr}})
+print(str(colordic))
 
 accr = []
-for i in range(len(tcol)):
+for i in range(len(test_colors)):
     rel=[]
-    for c in tcol[i]:
-        if tkwd[i] is not None:
-            for k in tkwd[i]:
+    for c in test_colors[i]:
+        if test_kwd[i] is not None:
+            for k in test_kwd[i]:
                 rel.append(get_CR(np.array(list(c)),k))
     if len(rel) > 0:
         rel = np.array(rel)
         cr = rel.mean()
-        if tcr[i] is not None and (tcr[i][0] is not None or tcr[i][0] != 0):
-            acc = 100-((abs(cr-tcr[i][0])/tcr[i][0])*100)
+        if test_color_rel[i] is not None and (test_color_rel[i][0] is not None or test_color_rel[i][0] != 0):
+            acc = 100-((abs(cr-test_color_rel[i][0])/test_color_rel[i][0])*100)
             if acc != -np.inf and acc != np.inf:   
                 accr.append(acc)
 accr = np.array(accr)
 print(accr.mean())
-
-
-# In[19]:
-
-
-
-
-# In[20]:
-
 print(accr)
-
-
-# In[15]:
-
-
-
-
-# In[ ]:
-
-
-

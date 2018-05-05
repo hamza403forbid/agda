@@ -86,11 +86,3 @@ model.fit(X_train, y_train,
 score = model.evaluate(X_test, y_test, verbose=1)
 print('Test loss:', score)
 
-#model.compile(loss='mean_squared_error',optimizer='sgd',metrics=['accuracy'])
-#model.fit(X_train, y_train, batch_size=1, epochs=1000, verbose=1)
-
-
-# In[ ]:
-
-
-

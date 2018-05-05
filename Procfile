@@ -1,1 +1,1 @@
-web: python AGDA_Process_Pipeline.py runserver 0.0.0.0:5000
+web: python Color_Rel.py runserver 0.0.0.0:5000
