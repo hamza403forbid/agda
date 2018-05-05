@@ -63,7 +63,7 @@ test_kwd = []
 test_colors = []
 test_color_rel =[]
 it=0
-for i in data[x:x*1.5]:
+for i in data[x:integer(1.5*x)]:
     print(it)
     r = requests.get(i['url'],stream=True).raw
     try:
