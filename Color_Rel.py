@@ -38,7 +38,7 @@ kwd = []
 colors = []
 color_rel =[]
 it=0
-x=150
+x=50
 for i in data[:x]:
     print(it)
     r = requests.get(i['url'],stream=True).raw
@@ -63,7 +63,7 @@ test_kwd = []
 test_colors = []
 test_color_rel =[]
 it=0
-for i in data[x:]:
+for i in data[x:x*1.5]:
     print(it)
     r = requests.get(i['url'],stream=True).raw
     try:
@@ -107,8 +107,8 @@ for i in range(len(test_colors)):
     if len(rel) > 0:
         rel = np.array(rel)
         cr = rel.mean()
-        if test_color_rel[i] is not None and (test_color_rel[i][0] is not None or test_color_rel[i][0] != 0):
-            acc = 100-((abs(cr-test_color_rel[i][0])/test_color_rel[i][0])*100)
+        if test_color_rel[i] is not None and (test_color_rel[i] != 0):
+            acc = 100-((abs(cr-test_color_rel[i])/test_color_rel[i])*100)
             if acc != -np.inf and acc != np.inf:   
                 accr.append(acc)
 accr = np.array(accr)
