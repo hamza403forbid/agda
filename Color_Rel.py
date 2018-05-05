@@ -38,8 +38,8 @@ kwd = []
 colors = []
 color_rel =[]
 it=0
-x=50
-y=75
+x=20
+y=35
 for i in data[:x]:
     print(it)
     r = requests.get(i['url'],stream=True).raw
@@ -76,9 +76,10 @@ for i in data[x:y]:
         test_kwd.append(kd)
     except IOError:
         print("Load Error")
-        test_colors.pop()
-        test_color_rel.pop()
-        test_kwd.pop()
+        if it>0:
+            test_colors.pop()
+            test_color_rel.pop()
+            test_kwd.pop()
         test_colors.append(None)
         test_color_rel.append(None)
         test_kwd.append(None)
