@@ -38,8 +38,8 @@ kwd = []
 colors = []
 color_rel =[]
 it=0
-x=20
-y=35
+x=25
+y=30
 for i in data[:x]:
     print(it)
     r = requests.get(i['url'],stream=True).raw
@@ -103,11 +103,11 @@ print(str(colordic))
 accr = []
 for i in range(len(test_colors)):
     rel=[]
-	if test_colors[i] is not None:
-		for c in test_colors[i]:
-			if test_kwd[i] is not None:
-				for k in test_kwd[i]:
-					rel.append(get_CR(np.array(list(c)),k))
+    if test_colors[i] is not None:
+        for c in test_colors[i]:
+            if test_kwd[i] is not None:
+                for k in test_kwd[i]:
+                    rel.append(get_CR(np.array(list(c)),k))
     if len(rel) > 0:
         rel = np.array(rel)
         cr = rel.mean()
