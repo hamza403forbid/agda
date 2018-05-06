@@ -100,6 +100,7 @@ for i,img in enumerate(test_colors):
             rel.append(get_CR(color,keyword))
     
     calculated_color_rel= np.array(rel).mean()
-    acc= 100-((abs(calculated_color_rel-test_color_rel[i])/test_color_rel[i])*100)
-    accr.append(acc)
+    if test_color_rel[i]>0:
+        acc= 100-((abs(calculated_color_rel-test_color_rel[i])/test_color_rel[i])*100)
+        accr.append(acc)
 print(np.array(accr).mean())
