@@ -41,8 +41,10 @@ color_rel =[]
 it=0
 x=int(os.environ.get('X',5))
 y=int(os.environ.get('Y',7))
-for i in data[:x]:
+for i in data:
     print(it)
+    if it>=x:
+        break
     r = requests.get(i['url'],stream=True).raw
     check = False
     try:
@@ -62,9 +64,12 @@ for i in data[:x]:
 test_kwd = []
 test_colors = []
 test_color_rel =[]
+x=it
 it=0
-for i in data[x:y]:
+for i in data[x:]:
     print(it)
+    if it>=y-x:
+        break
     r = requests.get(i['url'],stream=True).raw
     check = False
     try:
