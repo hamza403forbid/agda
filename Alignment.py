@@ -94,7 +94,7 @@ model.compile(loss='mean_squared_error',optimizer='adam')
 
 model.fit(X_train, y_train,
           batch_size=32,
-          epochs=75,
+          epochs=int(os.environ.get('EP',75)),
           verbose=1,
           validation_data=(X_test, y_test))
 score = model.evaluate(X_test, y_test, verbose=1)
