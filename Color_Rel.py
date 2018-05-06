@@ -1,4 +1,5 @@
 import requests
+import os
 from colorthief import ColorThief
 import numpy as np
 import random
@@ -38,8 +39,8 @@ kwd = []
 colors = []
 color_rel =[]
 it=0
-x=25
-y=30
+x=int(os.environ.get('X',5))
+y=int(os.environ.get('Y',7))
 for i in data[:x]:
     print(it)
     r = requests.get(i['url'],stream=True).raw
