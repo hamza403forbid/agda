@@ -43,24 +43,21 @@ y=30
 for i in data[:x]:
     print(it)
     r = requests.get(i['url'],stream=True).raw
+    check = False
     try:
         color_thief = ColorThief(r)
         colors.append(color_thief.get_palette(color_count=3))
-        #Labels
+        check = True
+    except IOError:
+        print("Load Error")
+        check = False
+    if check:
+        
         color_rel.append(i['color_r'])
         kd = i['keyword'].split(';')
         kwd.append(kd)
-    except IOError:
-        print("Load Error")
-        if it>0:
-            colors.pop()
-            color_rel.pop()
-            kwd.pop()
-        colors.append(None)
-        color_rel.append(None)
-        kwd.append(None)
-    it=it+1
-
+        it=it+1       
+    
 test_kwd = []
 test_colors = []
 test_color_rel =[]
@@ -68,29 +65,24 @@ it=0
 for i in data[x:y]:
     print(it)
     r = requests.get(i['url'],stream=True).raw
+    check = False
     try:
         color_thief = ColorThief(r)
         test_colors.append(color_thief.get_palette(color_count=3))
-        #Labels
+        check = True
+    except IOError:
+        print("Load Error")
+        check = False
+    if check:
         test_color_rel.append(i['color_r'])
         kd = i['keyword'].split(';')
         test_kwd.append(kd)
-    except IOError:
-        print("Load Error")
-        if it>0:
-            test_colors.pop()
-            test_color_rel.pop()
-            test_kwd.pop()
-        test_colors.append(None)
-        test_color_rel.append(None)
-        test_kwd.append(None)
-    it=it+1
+        it=it+1
+        
 
 colordic = {}
 for i in range(len(colors)):
-    if colors[i] is not None:
         for c in colors[i]:
-            if not c is None:
                 for k in kwd[i]:
                     key = str(c)
                     if not (key in colordic and colordic[key]['keyword']==k):
@@ -98,22 +90,15 @@ for i in range(len(colors)):
                     else:
                         icr = (colordic[key]['cr']+color_rel[i])/2
                         colordic.update({key:{'keyword':k, 'cr':icr}})
-print(str(colordic))
 
-accr = []
-for i in range(len(test_colors)):
+accr=[]
+for i,img in enumerate(test_colors):
     rel=[]
-    if test_colors[i] is not None:
-        for c in test_colors[i]:
-            if test_kwd[i] is not None:
-                for k in test_kwd[i]:
-                    rel.append(get_CR(np.array(list(c)),k))
-    if len(rel) > 0:
-        rel = np.array(rel)
-        cr = rel.mean()
-        if test_color_rel[i] is not None and (test_color_rel[i] != 0):
-            acc = 100-((abs(cr-test_color_rel[i])/test_color_rel[i])*100)
-            accr.append(acc)
-accr = np.array(accr)
-print(accr.mean())
-print(accr)
+    for color in img:
+        for keyword in test_kwd[i]:
+            rel.append(get_CR(color,keyword))
+    
+    calculated_color_rel= np.array(rel).mean()
+    acc= 100-((abs(calculated_color_rel-test_color_rel[i])/test_color_rel[i])*100)
+    accr.append(acc)
+print(np.array(accr).mean())
